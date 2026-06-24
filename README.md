@@ -16,7 +16,22 @@ venv\Scripts\activate  # Windows
 
 # Install required dependencies
 pip install -r requirements.txt
+
+
+## Dataset
+
+The dataset is too large for GitHub (>500 MB).
+
+Download it from:
+
+https://drive.google.com/file/d/151IxR5Fipf6liZKLJjHkTkpuiHDN9mTf/view?usp=drive_link
+
+After downloading, place the file in:
+
+data/candidates.jsonl
 ```
+
+
 
 ### 2. Run the Ranking Pipeline (Reproducibility Command)
 To run the ranking pipeline on the full dataset and generate the valid submission CSV, execute the following command:
