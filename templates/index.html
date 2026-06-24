@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redrob AI — Candidate Matching & Ranking Engine</title>
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for Beautiful Canvas Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Style System -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Loading Overlay screen -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="spinner-ring"></div>
+        <div class="loader-text-wrapper">
+            <div class="loader-title">Executing AI Ranking Pipeline</div>
+            <div id="loader-status-msg" class="loader-status">Initializing model...</div>
+            <div id="console-logger" class="console-logger"></div>
+        </div>
+    </div>
+
+    <!-- Sidebar Layout -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo-icon"><i class="fas fa-brain"></i></span>
+            <span class="logo-text">REDROB AI<br><small style="font-size: 0.65rem; opacity: 0.7; color: var(--primary);">Matching Engine</small></span>
+        </div>
+        
+        <div class="sidebar-menu" id="sidebar-menu-list">
+            <a class="menu-item active" data-tab="jd-tab">
+                <i class="fas fa-file-alt"></i> Job Description
+            </a>
+            <a class="menu-item" data-tab="ranked-tab">
+                <i class="fas fa-trophy"></i> Top Candidates
+            </a>
+            <a class="menu-item" data-tab="analysis-tab">
+                <i class="fas fa-chart-pie"></i> Metrics Dashboard
+            </a>
+            <a class="menu-item" data-tab="visualization-tab">
+                <i class="fas fa-project-diagram"></i> Score Visualizer
+            </a>
+            <a class="menu-item" data-tab="skills-tab">
+                <i class="fas fa-puzzle-piece"></i> Skill Breakdown
+            </a>
+            <a class="menu-item" data-tab="experience-tab">
+                <i class="fas fa-history"></i> Experience Analysis
+            </a>
+            <a class="menu-item" data-tab="compare-tab">
+                <i class="fas fa-exchange-alt"></i> Compare Profiles
+            </a>
+            <a class="menu-item" data-tab="validate-tab">
+                <i class="fas fa-check-double"></i> Validate & Download
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="control-panel-title">Control Panel</div>
+            <div class="dataset-info">
+                <strong>JD file:</strong> job_description.docx<br>
+                <strong>Database:</strong> candidates.jsonl<br>
+                <strong>Size:</strong> 100,000 candidates
+            </div>
+            <button class="btn-primary" id="btn-run-engine">
+                <i class="fas fa-cogs"></i> Run Ranking Engine
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Main Application Wrapper -->
+        <div id="dashboard-wrapper">
+            <div class="header-section">
+                <h1 class="main-title">Talent Matching & Candidate Ranking Engine</h1>
+                <p class="subtitle">AI-Powered Candidate Discovery for Series A Founding AI Engineering Org</p>
+            </div>
+
+            <!-- Stats Grid Section -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-title">Total Pool Scanned</div>
+                    <div class="metric-value">100,000</div>
+                    <div class="metric-delta delta-success">
+                        <i class="fas fa-bolt"></i> 100% database coverage
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Honeypots Blocked</div>
+                    <div class="metric-value">64</div>
+                    <div class="metric-delta delta-danger">
+                        <i class="fas fa-ban"></i> 0% honeypot rate in Top 100
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Top 10 Avg Match</div>
+                    <div class="metric-value" id="stat-avg-match">88.54%</div>
+                    <div class="metric-delta delta-success">
+                        <i class="fas fa-bullseye"></i> Extremely strong matches
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Rank 100 Cutoff</div>
+                    <div class="metric-value" id="stat-cutoff">83.90%</div>
+                    <div class="metric-delta delta-warning">
+                        <i class="fas fa-balance-scale"></i> Top 100 Score threshold
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. Job Description Viewer Tab -->
+            <div class="tab-content active" id="jd-tab">
+                <div class="glass-card">
+                    <div class="glass-card-title"><i class="fas fa-file-code"></i> Senior AI Engineer — Founding Team</div>
+                    <div class="jd-layout">
+                        <div>
+                            <div class="jd-text-area" id="jd-text-container">Parsing Job Description document...</div>
+                        </div>
+                        <div class="tags-section">
+                            <div>
+                                <h4>Required Skills</h4>
+                                <div class="tags-container">
+                                    <span class="tag tag-required">Python</span>
+                                    <span class="tag tag-required">Sentence-Transformers</span>
+                                    <span class="tag tag-required">Embeddings-based Retrieval</span>
+                                    <span class="tag tag-required">Vector Databases (FAISS, Pinecone)</span>
+                                    <span class="tag tag-required">Ranking Evaluation (NDCG, MAP)</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4>Preferred Skills</h4>
+                                <div class="tags-container">
+                                    <span class="tag tag-preferred">LLM Fine-tuning (LoRA/QLoRA)</span>
+                                    <span class="tag tag-preferred">Learning-to-Rank (XGBoost)</span>
+                                    <span class="tag tag-preferred">HR-tech Exposure</span>
+                                    <span class="tag tag-preferred">Distributed Systems (Spark)</span>
+                                    <span class="tag tag-preferred">Open Source Contributor</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4>Strict Disqualifiers (Filtered / Penalized)</h4>
+                                <div class="tags-container">
+                                    <span class="tag tag-disqualifier">Consulting-Only Entire Career</span>
+                                    <span class="tag tag-disqualifier">Job Hoppers (Tenure &lt; 18m)</span>
+                                    <span class="tag tag-disqualifier">Academic-Only (No Deployments)</span>
+                                    <span class="tag tag-disqualifier">Pure CV / Speech focus</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Top Ranked Candidates Tab -->
+            <div class="tab-content" id="ranked-tab">
+                <div class="glass-card">
+                    <div class="glass-card-title"><i class="fas fa-medal"></i> Top 100 Candidates Pool</div>
+                    <div class="candidates-layout">
+                        <!-- Left Candidates List -->
+                        <div>
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="candidate-search" class="search-input" placeholder="Search by Candidate ID, title, or keywords...">
+                            </div>
+                            <div class="candidates-list-scroll" id="candidates-list-container">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Right Candidate Inspector -->
+                        <div class="profile-inspector">
+                            <div class="inspector-header">
+                                <div class="inspector-name" id="ins-name">Candidate Name</div>
+                                <div class="inspector-subtitle" id="ins-role-company">Title at Company</div>
+                                <div class="inspector-subtitle" style="font-weight: 500;" id="ins-exp-loc">Experience & Location</div>
+                            </div>
+
+                            <div class="reasoning-box">
+                                <div style="font-weight: 700; margin-bottom: 0.35rem;"><i class="fas fa-lightbulb"></i> Match Reasoning Summary</div>
+                                <div id="ins-reasoning">Inspect a candidate to see reasoning details.</div>
+                            </div>
+
+                            <div>
+                                <div style="font-family: var(--font-heading); font-weight: 600; color: #fff; margin-bottom: 0.75rem;">Scoring Metrics Breakdown</div>
+                                <table class="subscores-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dimension</th>
+                                            <th>Score</th>
+                                            <th>Match Progression</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Semantic Similarity (40%)</td>
+                                            <td id="score-val-semantic">0.0%</td>
+                                            <td>
+                                                <div class="progress-bar-bg" style="width: 150px;">
+                                                    <div class="progress-bar-fill" id="score-bar-semantic"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Skills Match (25%)</td>
+                                            <td id="score-val-skills">0.0%</td>
+                                            <td>
+                                                <div class="progress-bar-bg" style="width: 150px;">
+                                                    <div class="progress-bar-fill" id="score-bar-skills"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Experience (20%)</td>
+                                            <td id="score-val-exp">0.0%</td>
+                                            <td>
+                                                <div class="progress-bar-bg" style="width: 150px;">
+                                                    <div class="progress-bar-fill" id="score-bar-exp"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Behavioral Signals (10%)</td>
+                                            <td id="score-val-behavioral">0.0%</td>
+                                            <td>
+                                                <div class="progress-bar-bg" style="width: 150px;">
+                                                    <div class="progress-bar-fill" id="score-bar-behavioral"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Education (5%)</td>
+                                            <td id="score-val-education">0.0%</td>
+                                            <td>
+                                                <div class="progress-bar-bg" style="width: 150px;">
+                                                    <div class="progress-bar-fill" id="score-bar-education"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div>
+                                <div style="font-family: var(--font-heading); font-weight: 600; color: #fff; margin-bottom: 0.75rem;">Career History</div>
+                                <div class="timeline-container" id="ins-timeline">
+                                    <!-- Dynamic Timeline -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Metrics Dashboard Tab -->
+            <div class="tab-content" id="analysis-tab">
+                <div class="charts-grid">
+                    <div class="glass-card">
+                        <div class="chart-container">
+                            <canvas id="chart-analysis-location"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="chart-container">
+                            <canvas id="chart-analysis-workmode"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="chart-container">
+                            <canvas id="chart-analysis-notice"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="chart-container">
+                            <canvas id="chart-analysis-salary"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Score Visualizer Tab -->
+            <div class="tab-content" id="visualization-tab">
+                <div class="charts-grid">
+                    <div class="glass-card">
+                        <div class="chart-container">
+                            <canvas id="chart-vis-score-dist"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="chart-container">
+                            <canvas id="chart-vis-score-decay"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card" style="margin-top: 1.5rem;">
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="chart-vis-radar"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Skill Breakdown Tab -->
+            <div class="tab-content" id="skills-tab">
+                <div class="candidates-layout">
+                    <div class="glass-card">
+                        <div class="chart-container" style="height: 480px;">
+                            <canvas id="chart-skills-freq"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="glass-card-title"><i class="fas fa-check-square"></i> Candidate Skill Checklist</div>
+                        <div class="select-wrapper" style="margin-bottom: 1.5rem;">
+                            <label for="select-candidate-checklist">Select Candidate to Inspect</label>
+                            <select id="select-candidate-checklist" class="form-select">
+                                <!-- Filled dynamically -->
+                            </select>
+                        </div>
+                        <div class="checklist-grid">
+                            <div class="checklist-card">
+                                <div class="checklist-title">Required Requirements Mapping</div>
+                                <div id="checklist-required-list">
+                                    <!-- Dynamic required -->
+                                </div>
+                            </div>
+                            <div class="checklist-card">
+                                <div class="checklist-title">Preferred Requirements Mapping</div>
+                                <div id="checklist-preferred-list">
+                                    <!-- Dynamic preferred -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Experience Analysis Tab -->
+            <div class="tab-content" id="experience-tab">
+                <div class="glass-card">
+                    <div class="chart-container" style="height: 400px; margin-bottom: 1.5rem;">
+                        <canvas id="chart-exp-scatter"></canvas>
+                    </div>
+                    <div class="info-callout">
+                        <i class="fas fa-info-circle"></i>
+                        <div class="info-callout-text">
+                            <strong>Disqualifiers and Filters applied:</strong> Candidate stability is essential. Those with an average job tenure below 1.5 years (job-hoppers) or whose entire career is with contracting/consulting organizations have been heavily penalized or filtered entirely. This chart maps only stable product development profiles.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Compare Profiles Tab -->
+            <div class="tab-content" id="compare-tab">
+                <div class="glass-card">
+                    <div class="glass-card-title"><i class="fas fa-users-cog"></i> Side-by-Side Candidate Comparison</div>
+                    
+                    <div class="compare-selector-row">
+                        <div class="select-wrapper">
+                            <label for="compare-select-a">Candidate A</label>
+                            <select id="compare-select-a" class="form-select"></select>
+                        </div>
+                        <div class="select-wrapper">
+                            <label for="compare-select-b">Candidate B</label>
+                            <select id="compare-select-b" class="form-select"></select>
+                        </div>
+                    </div>
+
+                    <div class="compare-grid">
+                        <!-- Candidate A Info -->
+                        <div class="compare-col">
+                            <div class="inspector-header" style="border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem;">
+                                <div class="inspector-name" id="comp-a-name" style="color: var(--primary);">Name A</div>
+                                <div class="inspector-subtitle" id="comp-a-id">ID A</div>
+                            </div>
+                            <div>
+                                <div class="compare-section-title">Professional Background</div>
+                                <div style="margin-top: 0.5rem; line-height: 1.6;">
+                                    <strong>Current Role:</strong> <span id="comp-a-role">Role</span><br>
+                                    <strong>Current Company:</strong> <span id="comp-a-company">Company</span><br>
+                                    <strong>Years of Experience:</strong> <span id="comp-a-exp">Exp</span><br>
+                                    <strong>Expected Max Salary:</strong> <span id="comp-a-salary">Salary</span><br>
+                                    <strong>Notice Period:</strong> <span id="comp-a-notice">Notice</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="compare-section-title">Composite Score Card</div>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem;">
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Semantic Match</span><span id="comp-a-score-semantic">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-a-bar-semantic"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Skills Match</span><span id="comp-a-score-skills">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-a-bar-skills"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Experience Match</span><span id="comp-a-score-exp">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-a-bar-exp"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Behavioral Signals</span><span id="comp-a-score-behavioral">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-a-bar-behavioral"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Education Match</span><span id="comp-a-score-education">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-a-bar-education"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reasoning-box" style="margin-top: 1rem;">
+                                <div style="font-weight: 700; margin-bottom: 0.35rem;"><i class="fas fa-lightbulb"></i> Candidate A Reasoning</div>
+                                <div id="comp-a-reason">Reasoning details.</div>
+                            </div>
+                        </div>
+
+                        <!-- Candidate B Info -->
+                        <div class="compare-col" style="border-left: 1px solid var(--border-glass); padding-left: 2rem;">
+                            <div class="inspector-header" style="border-bottom: 1px solid var(--border-glass); padding-bottom: 1rem;">
+                                <div class="inspector-name" id="comp-b-name" style="color: var(--secondary);">Name B</div>
+                                <div class="inspector-subtitle" id="comp-b-id">ID B</div>
+                            </div>
+                            <div>
+                                <div class="compare-section-title">Professional Background</div>
+                                <div style="margin-top: 0.5rem; line-height: 1.6;">
+                                    <strong>Current Role:</strong> <span id="comp-b-role">Role</span><br>
+                                    <strong>Current Company:</strong> <span id="comp-b-company">Company</span><br>
+                                    <strong>Years of Experience:</strong> <span id="comp-b-exp">Exp</span><br>
+                                    <strong>Expected Max Salary:</strong> <span id="comp-b-salary">Salary</span><br>
+                                    <strong>Notice Period:</strong> <span id="comp-b-notice">Notice</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="compare-section-title">Composite Score Card</div>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem;">
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Semantic Match</span><span id="comp-b-score-semantic">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-b-bar-semantic"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Skills Match</span><span id="comp-b-score-skills">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-b-bar-skills"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Experience Match</span><span id="comp-b-score-exp">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-b-bar-exp"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Behavioral Signals</span><span id="comp-b-score-behavioral">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-b-bar-behavioral"></div></div>
+                                    </div>
+                                    <div class="compare-score-row">
+                                        <div class="compare-score-label"><span>Education Match</span><span id="comp-b-score-education">0%</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="comp-b-bar-education"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reasoning-box" style="margin-top: 1rem;">
+                                <div style="font-weight: 700; margin-bottom: 0.35rem;"><i class="fas fa-lightbulb"></i> Candidate B Reasoning</div>
+                                <div id="comp-b-reason">Reasoning details.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Validate & Download Tab -->
+            <div class="tab-content" id="validate-tab">
+                <div class="glass-card">
+                    <div class="glass-card-title"><i class="fas fa-cloud-download-alt"></i> Submission File Management</div>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.6; color: var(--text-secondary);">
+                        The compiled ranking results have been generated and structured into the required CSV format. You can download the submission file directly or run the automated parser constraints check below to verify conformity.
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                        <a href="/download-csv" class="btn-primary" style="text-decoration: none; width: auto; padding: 0.75rem 2rem;">
+                            <i class="fas fa-file-csv"></i> Download CSV
+                        </a>
+                        <a href="/download-xlsx" class="btn-primary" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3); text-decoration: none; width: auto; padding: 0.75rem 2rem;">
+                            <i class="fas fa-file-excel"></i> Download XLSX
+                        </a>
+                        <button class="btn-secondary" id="btn-validate-csv" style="width: auto; padding: 0.75rem 2rem; margin: 0;">
+                            <i class="fas fa-clipboard-check"></i> Validate Format
+                        </button>
+                    </div>
+                    
+                    <div class="glass-card-title" style="font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-terminal"></i> Validator Output Console</div>
+                    <div class="validator-output" id="validation-output-container">
+                        Click "Validate Submission Format" to execute evaluation script.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup Screen (when no data exists) -->
+        <div id="welcome-wrapper" class="welcome-screen" style="display: none;">
+            <div class="welcome-icon">🤖</div>
+            <h2 class="welcome-title">Welcome to Redrob Matching Engine</h2>
+            <p class="welcome-desc">
+                The ranking pipeline metrics are not compiled yet. Initialize the engine now to scan the candidate pool of 100,000 records, apply honeypot filtration logic, build TF-IDF indexes, and score candidates via dense Sentence-BERT models on CPU.
+            </p>
+            <button class="btn-primary" id="btn-run-engine-welcome" style="max-width: 320px; margin: 0 auto;">
+                <i class="fas fa-play"></i> Initialize & Run Ranking Engine
+            </button>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript dashboard controls -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
